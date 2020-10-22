@@ -32,7 +32,7 @@ def get_retelling_question(question_index: int, page: int, page_size: int) -> (l
         data = []
         for question in questions:
             data.append(RetellingQuestion(
-                questionIndex=question_index,
+                questionIndex=question['index'],
                 rawText=question['text'],
                 keywords=question['wordbase']['keywords'],
                 detailwords=question['wordbase']['detailwords'],
