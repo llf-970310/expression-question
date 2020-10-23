@@ -25,6 +25,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('')
     print('Functions:')
     print('  GetRetellingQuestionResponse getRetellingQuestion(GetRetellingQuestionRequest request)')
+    print('  DelQuestionResponse delQuestion(DelQuestionRequest request)')
+    print('  DelOriginalQuestionResponse delOriginalQuestion(DelOriginalQuestionRequest request)')
     print('  GenerateWordbaseResponse generateWordbase(GenerateWordbaseRequest request)')
     print('')
     sys.exit(0)
@@ -110,6 +112,18 @@ if cmd == 'getRetellingQuestion':
         print('getRetellingQuestion requires 1 args')
         sys.exit(1)
     pp.pprint(client.getRetellingQuestion(eval(args[0]),))
+
+elif cmd == 'delQuestion':
+    if len(args) != 1:
+        print('delQuestion requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.delQuestion(eval(args[0]),))
+
+elif cmd == 'delOriginalQuestion':
+    if len(args) != 1:
+        print('delOriginalQuestion requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.delOriginalQuestion(eval(args[0]),))
 
 elif cmd == 'generateWordbase':
     if len(args) != 1:

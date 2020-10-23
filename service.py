@@ -1,5 +1,6 @@
 from errors import *
 from manager import wordbase_manager
+from model.origin import OriginTypeTwoQuestionModel
 from model.question import QuestionModel
 from question.ttypes import *
 
@@ -49,3 +50,22 @@ def generate_wordbase(text: str) -> (list, list):
     wordbase_generator = wordbase_manager.WordbaseGenerator()
     wordbase = wordbase_generator.generate_wordbase(text)
     return wordbase['keywords'], wordbase['detailwords']
+
+
+def del_question(question_index: int):
+    to_delete_question = QuestionModel.objects(index=question_index).first()
+
+    # 要获取的题目不存在
+    if not to_delete_question:
+        raise QuestionNotExist
+    else:
+        to_delete_question.delete()
+
+
+def del_original_question(q_id: int):
+    origin_question = OriginTypeTwoQuestionModel.objects(q_id=q_id).first()
+
+    if not origin_question:
+        raise QuestionNotExist
+    else:
+        origin_question.delete()

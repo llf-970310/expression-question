@@ -37,3 +37,31 @@ def generate_wordbase(request: GenerateWordbaseRequest) -> GenerateWordbaseRespo
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+@func_log
+def del_question(request: DelQuestionRequest) -> DelQuestionResponse:
+    resp = DelQuestionResponse()
+    question_index = request.questionIndex
+
+    try:
+        service.del_question(question_index)
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp
+
+
+@func_log
+def del_original_question(request: DelOriginalQuestionRequest) -> DelOriginalQuestionResponse:
+    resp = DelOriginalQuestionResponse()
+    q_id = request.id
+
+    try:
+        service.del_original_question(q_id)
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

@@ -21,6 +21,12 @@ class QuestionServiceHandler:
     def generateWordbase(self, request: GenerateWordbaseRequest) -> GenerateWordbaseResponse:
         return handler.generate_wordbase(request)
 
+    def delQuestion(self, request: DelQuestionRequest) -> DelQuestionResponse:
+        return handler.del_question(request)
+
+    def delOriginalQuestion(self, request: DelOriginalQuestionRequest) -> DelOriginalQuestionResponse:
+        return handler.del_original_question(request)
+
 
 if __name__ == '__main__':
     # init mongo
