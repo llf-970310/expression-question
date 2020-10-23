@@ -21,3 +21,19 @@ def get_retelling_question(request: GetRetellingQuestionRequest) -> GetRetelling
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+@func_log
+def generate_wordbase(request: GenerateWordbaseRequest) -> GenerateWordbaseResponse:
+    resp = GenerateWordbaseResponse()
+    text = request.text
+
+    try:
+        keywords, detail_words = service.generate_wordbase(text)
+        resp.keywords = keywords
+        resp.detailwords = detail_words
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

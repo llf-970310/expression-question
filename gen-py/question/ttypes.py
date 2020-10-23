@@ -371,6 +371,203 @@ class GetRetellingQuestionResponse(object):
 
     def __ne__(self, other):
         return not (self == other)
+
+
+class GenerateWordbaseRequest(object):
+    """
+    Attributes:
+     - text
+
+    """
+
+
+    def __init__(self, text=None,):
+        self.text = text
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.text = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GenerateWordbaseRequest')
+        if self.text is not None:
+            oprot.writeFieldBegin('text', TType.STRING, 1)
+            oprot.writeString(self.text.encode('utf-8') if sys.version_info[0] == 2 else self.text)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.text is None:
+            raise TProtocolException(message='Required field text is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class GenerateWordbaseResponse(object):
+    """
+    Attributes:
+     - keywords
+     - detailwords
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, keywords=None, detailwords=None, statusCode=None, statusMsg=None,):
+        self.keywords = keywords
+        self.detailwords = detailwords
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.LIST:
+                    self.keywords = []
+                    (_etype45, _size42) = iprot.readListBegin()
+                    for _i46 in range(_size42):
+                        _elem47 = []
+                        (_etype51, _size48) = iprot.readListBegin()
+                        for _i52 in range(_size48):
+                            _elem53 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                            _elem47.append(_elem53)
+                        iprot.readListEnd()
+                        self.keywords.append(_elem47)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.LIST:
+                    self.detailwords = []
+                    (_etype57, _size54) = iprot.readListBegin()
+                    for _i58 in range(_size54):
+                        _elem59 = []
+                        (_etype63, _size60) = iprot.readListBegin()
+                        for _i64 in range(_size60):
+                            _elem65 = []
+                            (_etype69, _size66) = iprot.readListBegin()
+                            for _i70 in range(_size66):
+                                _elem71 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                                _elem65.append(_elem71)
+                            iprot.readListEnd()
+                            _elem59.append(_elem65)
+                        iprot.readListEnd()
+                        self.detailwords.append(_elem59)
+                    iprot.readListEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GenerateWordbaseResponse')
+        if self.keywords is not None:
+            oprot.writeFieldBegin('keywords', TType.LIST, 1)
+            oprot.writeListBegin(TType.LIST, len(self.keywords))
+            for iter72 in self.keywords:
+                oprot.writeListBegin(TType.STRING, len(iter72))
+                for iter73 in iter72:
+                    oprot.writeString(iter73.encode('utf-8') if sys.version_info[0] == 2 else iter73)
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.detailwords is not None:
+            oprot.writeFieldBegin('detailwords', TType.LIST, 2)
+            oprot.writeListBegin(TType.LIST, len(self.detailwords))
+            for iter74 in self.detailwords:
+                oprot.writeListBegin(TType.LIST, len(iter74))
+                for iter75 in iter74:
+                    oprot.writeListBegin(TType.STRING, len(iter75))
+                    for iter76 in iter75:
+                        oprot.writeString(iter76.encode('utf-8') if sys.version_info[0] == 2 else iter76)
+                    oprot.writeListEnd()
+                oprot.writeListEnd()
+            oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 3)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 4)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.keywords is None:
+            raise TProtocolException(message='Required field keywords is unset!')
+        if self.detailwords is None:
+            raise TProtocolException(message='Required field detailwords is unset!')
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
 all_structs.append(RetellingQuestion)
 RetellingQuestion.thrift_spec = (
     None,  # 0
@@ -394,6 +591,19 @@ GetRetellingQuestionResponse.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'questions', (TType.STRUCT, [RetellingQuestion, None], False), None, ),  # 1
     (2, TType.I32, 'total', None, None, ),  # 2
+    (3, TType.I32, 'statusCode', None, None, ),  # 3
+    (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
+)
+all_structs.append(GenerateWordbaseRequest)
+GenerateWordbaseRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'text', 'UTF8', None, ),  # 1
+)
+all_structs.append(GenerateWordbaseResponse)
+GenerateWordbaseResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.LIST, 'keywords', (TType.LIST, (TType.STRING, 'UTF8', False), False), None, ),  # 1
+    (2, TType.LIST, 'detailwords', (TType.LIST, (TType.LIST, (TType.STRING, 'UTF8', False), False), False), None, ),  # 2
     (3, TType.I32, 'statusCode', None, None, ),  # 3
     (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
 )

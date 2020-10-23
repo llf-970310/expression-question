@@ -18,6 +18,9 @@ class QuestionServiceHandler:
     def getRetellingQuestion(self, request: GetRetellingQuestionRequest) -> GetRetellingQuestionResponse:
         return handler.get_retelling_question(request)
 
+    def generateWordbase(self, request: GenerateWordbaseRequest) -> GenerateWordbaseResponse:
+        return handler.generate_wordbase(request)
+
 
 if __name__ == '__main__':
     # init mongo

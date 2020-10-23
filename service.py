@@ -1,4 +1,5 @@
 from errors import *
+from manager import wordbase_manager
 from model.question import QuestionModel
 from question.ttypes import *
 
@@ -42,3 +43,9 @@ def get_retelling_question(question_index: int, page: int, page_size: int) -> (l
             ))
 
         return data, all_questions_num
+
+
+def generate_wordbase(text: str) -> (list, list):
+    wordbase_generator = wordbase_manager.WordbaseGenerator()
+    wordbase = wordbase_generator.generate_wordbase(text)
+    return wordbase['keywords'], wordbase['detailwords']
