@@ -27,6 +27,9 @@ class QuestionServiceHandler:
     def delOriginalQuestion(self, request: DelOriginalQuestionRequest) -> DelOriginalQuestionResponse:
         return handler.del_original_question(request)
 
+    def saveRetellingQuestion(self, request: SaveRetellingQuestionRequest) -> SaveRetellingQuestionResponse:
+        return handler.save_retelling_question(request)
+
 
 if __name__ == '__main__':
     # init mongo

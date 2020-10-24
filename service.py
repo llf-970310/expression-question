@@ -1,5 +1,7 @@
+import logging
+
 from errors import *
-from manager import wordbase_manager
+from manager import wordbase_manager, question_manager
 from model.origin import OriginTypeTwoQuestionModel
 from model.question import QuestionModel
 from question.ttypes import *
@@ -69,3 +71,41 @@ def del_original_question(q_id: int):
         raise QuestionNotExist
     else:
         origin_question.delete()
+
+
+def save_retelling_question(new_question: RetellingQuestion):
+    # modify
+    if new_question.questionIndex:
+        question = QuestionModel.objects(index=new_question.questionIndex).first()
+        if not question:
+            raise QuestionNotExist
+
+        # 修改关键词的同时需要重置关键词权重
+        wordbase = {
+            "keywords": new_question.keywords,
+            "detailwords": new_question.detailwords
+        }
+        question.update(
+            text=new_question.rawText,
+            wordbase=wordbase,
+            weights=wordbase_manager.reset_question_weights(wordbase)
+        )
+    # add
+    else:
+        next_q_index = question_manager.get_next_available_question_index()
+        logging.info('[save_retelling_question] next_question_index: ' + next_q_index.__str__())
+
+        # 插入 questions，初始化关键词权重 weights
+        wordbase = {
+            "keywords": new_question.keywords,
+            "detailwords": new_question.detailwords
+        }
+        new_question = QuestionModel(
+            q_type=2,
+            level=5,
+            text=new_question.rawText,
+            wordbase=wordbase,
+            weights=wordbase_manager.reset_question_weights(wordbase),
+            index=next_q_index
+        )
+        new_question.save()

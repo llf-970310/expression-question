@@ -65,3 +65,17 @@ def del_original_question(request: DelOriginalQuestionRequest) -> DelOriginalQue
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+@func_log
+def save_retelling_question(request: SaveRetellingQuestionRequest) -> SaveRetellingQuestionResponse:
+    resp = SaveRetellingQuestionResponse()
+    new_question = request.newQuestion
+
+    try:
+        service.save_retelling_question(new_question)
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

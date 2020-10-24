@@ -1,5 +1,6 @@
 # -*— coding: utf-8 -*-
 import re
+from functools import reduce
 
 import jieba
 import jieba.analyse
@@ -122,3 +123,24 @@ class WordbaseGenerator:
         wordbase['keywords'] = cur_keywords
         wordbase['detailwords'] = cur_detailwords
         return wordbase
+
+
+def reset_question_weights(wordbase: dict) -> dict:
+    """
+    1。 重置问题关键词的权重：权重的数量等于词的数量加一，每个词的权重=100/权重的数量
+    2。 重置权重的击中次数为0
+    """
+    weights = {}
+    len_keywords = len(wordbase['keywords'])
+    len_detailwords = len(reduce(lambda x, y: x + y, wordbase['detailwords']))
+
+    # 重置问题关键词的权重
+    key_init = 100 / (len_keywords + 1)
+    detail_init = 100 / (len_detailwords + 1)
+    weights['key'] = [key_init for i in range(len_keywords + 1)]
+    weights['detail'] = [detail_init for i in range(len_detailwords + 1)]
+
+    # 重置权重的击中次数为0
+    weights['key_hit_times'] = [0 for i in range(len_keywords)]
+    weights['detail_hit_times'] = [0 for i in range(len_detailwords)]
+    return weights
