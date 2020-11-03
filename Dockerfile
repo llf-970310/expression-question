@@ -3,7 +3,9 @@ MAINTAINER lilf <lf97310@gmail.com>
 
 ENV TZ=Asia/Shanghai
 
-RUN apt-get update -y && \
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list && \
+    apt-get clean && \
+    apt-get update -y && \
     apt-get install -y python3.6 python3-pip python3.6-dev
 
 # 并更新pip
@@ -23,4 +25,4 @@ EXPOSE 9094
 WORKDIR /expression-question
 COPY ./ /expression-question
 
-ENTRYPOINT ["python3.6", "server.py"]
+ENTRYPOINT ["python3.6", "-u", "server.py"]
