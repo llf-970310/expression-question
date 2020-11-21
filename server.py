@@ -37,6 +37,9 @@ class QuestionServiceHandler:
     def saveRetellingQuestion(self, request: SaveRetellingQuestionRequest) -> SaveRetellingQuestionResponse:
         return handler.save_retelling_question(request)
 
+    def saveQuestionFeedback(self, request: SaveQuestionFeedbackRequest) -> SaveQuestionFeedbackResponse:
+        return handler.save_question_feedback(request)
+
 
 if __name__ == '__main__':
     # init mongo

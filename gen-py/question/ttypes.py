@@ -649,12 +649,12 @@ class DelQuestionResponse(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 2:
+            if fid == 1:
                 if ftype == TType.I32:
                     self.statusCode = iprot.readI32()
                 else:
                     iprot.skip(ftype)
-            elif fid == 3:
+            elif fid == 2:
                 if ftype == TType.STRING:
                     self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
@@ -670,11 +670,11 @@ class DelQuestionResponse(object):
             return
         oprot.writeStructBegin('DelQuestionResponse')
         if self.statusCode is not None:
-            oprot.writeFieldBegin('statusCode', TType.I32, 2)
+            oprot.writeFieldBegin('statusCode', TType.I32, 1)
             oprot.writeI32(self.statusCode)
             oprot.writeFieldEnd()
         if self.statusMsg is not None:
-            oprot.writeFieldBegin('statusMsg', TType.STRING, 3)
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 2)
             oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -780,12 +780,12 @@ class DelOriginalQuestionResponse(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 2:
+            if fid == 1:
                 if ftype == TType.I32:
                     self.statusCode = iprot.readI32()
                 else:
                     iprot.skip(ftype)
-            elif fid == 3:
+            elif fid == 2:
                 if ftype == TType.STRING:
                     self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
@@ -801,11 +801,11 @@ class DelOriginalQuestionResponse(object):
             return
         oprot.writeStructBegin('DelOriginalQuestionResponse')
         if self.statusCode is not None:
-            oprot.writeFieldBegin('statusCode', TType.I32, 2)
+            oprot.writeFieldBegin('statusCode', TType.I32, 1)
             oprot.writeI32(self.statusCode)
             oprot.writeFieldEnd()
         if self.statusMsg is not None:
-            oprot.writeFieldBegin('statusMsg', TType.STRING, 3)
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 2)
             oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -912,12 +912,12 @@ class SaveRetellingQuestionResponse(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 2:
+            if fid == 1:
                 if ftype == TType.I32:
                     self.statusCode = iprot.readI32()
                 else:
                     iprot.skip(ftype)
-            elif fid == 3:
+            elif fid == 2:
                 if ftype == TType.STRING:
                     self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
@@ -933,11 +933,188 @@ class SaveRetellingQuestionResponse(object):
             return
         oprot.writeStructBegin('SaveRetellingQuestionResponse')
         if self.statusCode is not None:
-            oprot.writeFieldBegin('statusCode', TType.I32, 2)
+            oprot.writeFieldBegin('statusCode', TType.I32, 1)
             oprot.writeI32(self.statusCode)
             oprot.writeFieldEnd()
         if self.statusMsg is not None:
-            oprot.writeFieldBegin('statusMsg', TType.STRING, 3)
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 2)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class SaveQuestionFeedbackRequest(object):
+    """
+    Attributes:
+     - questionId
+     - upChange
+     - downChange
+     - likeChange
+     - userId
+
+    """
+
+
+    def __init__(self, questionId=None, upChange=None, downChange=None, likeChange=None, userId=None,):
+        self.questionId = questionId
+        self.upChange = upChange
+        self.downChange = downChange
+        self.likeChange = likeChange
+        self.userId = userId
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.questionId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.upChange = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.downChange = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.I32:
+                    self.likeChange = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.STRING:
+                    self.userId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('SaveQuestionFeedbackRequest')
+        if self.questionId is not None:
+            oprot.writeFieldBegin('questionId', TType.STRING, 1)
+            oprot.writeString(self.questionId.encode('utf-8') if sys.version_info[0] == 2 else self.questionId)
+            oprot.writeFieldEnd()
+        if self.upChange is not None:
+            oprot.writeFieldBegin('upChange', TType.I32, 2)
+            oprot.writeI32(self.upChange)
+            oprot.writeFieldEnd()
+        if self.downChange is not None:
+            oprot.writeFieldBegin('downChange', TType.I32, 3)
+            oprot.writeI32(self.downChange)
+            oprot.writeFieldEnd()
+        if self.likeChange is not None:
+            oprot.writeFieldBegin('likeChange', TType.I32, 4)
+            oprot.writeI32(self.likeChange)
+            oprot.writeFieldEnd()
+        if self.userId is not None:
+            oprot.writeFieldBegin('userId', TType.STRING, 5)
+            oprot.writeString(self.userId.encode('utf-8') if sys.version_info[0] == 2 else self.userId)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.questionId is None:
+            raise TProtocolException(message='Required field questionId is unset!')
+        if self.userId is None:
+            raise TProtocolException(message='Required field userId is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class SaveQuestionFeedbackResponse(object):
+    """
+    Attributes:
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, statusCode=None, statusMsg=None,):
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('SaveQuestionFeedbackResponse')
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 1)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 2)
             oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1007,9 +1184,8 @@ DelQuestionRequest.thrift_spec = (
 all_structs.append(DelQuestionResponse)
 DelQuestionResponse.thrift_spec = (
     None,  # 0
-    None,  # 1
-    (2, TType.I32, 'statusCode', None, None, ),  # 2
-    (3, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 3
+    (1, TType.I32, 'statusCode', None, None, ),  # 1
+    (2, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 2
 )
 all_structs.append(DelOriginalQuestionRequest)
 DelOriginalQuestionRequest.thrift_spec = (
@@ -1019,9 +1195,8 @@ DelOriginalQuestionRequest.thrift_spec = (
 all_structs.append(DelOriginalQuestionResponse)
 DelOriginalQuestionResponse.thrift_spec = (
     None,  # 0
-    None,  # 1
-    (2, TType.I32, 'statusCode', None, None, ),  # 2
-    (3, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 3
+    (1, TType.I32, 'statusCode', None, None, ),  # 1
+    (2, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 2
 )
 all_structs.append(SaveRetellingQuestionRequest)
 SaveRetellingQuestionRequest.thrift_spec = (
@@ -1031,9 +1206,23 @@ SaveRetellingQuestionRequest.thrift_spec = (
 all_structs.append(SaveRetellingQuestionResponse)
 SaveRetellingQuestionResponse.thrift_spec = (
     None,  # 0
-    None,  # 1
-    (2, TType.I32, 'statusCode', None, None, ),  # 2
-    (3, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 3
+    (1, TType.I32, 'statusCode', None, None, ),  # 1
+    (2, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 2
+)
+all_structs.append(SaveQuestionFeedbackRequest)
+SaveQuestionFeedbackRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'questionId', 'UTF8', None, ),  # 1
+    (2, TType.I32, 'upChange', None, None, ),  # 2
+    (3, TType.I32, 'downChange', None, None, ),  # 3
+    (4, TType.I32, 'likeChange', None, None, ),  # 4
+    (5, TType.STRING, 'userId', 'UTF8', None, ),  # 5
+)
+all_structs.append(SaveQuestionFeedbackResponse)
+SaveQuestionFeedbackResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.I32, 'statusCode', None, None, ),  # 1
+    (2, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 2
 )
 fix_spec(all_structs)
 del all_structs

@@ -79,3 +79,24 @@ def save_retelling_question(request: SaveRetellingQuestionRequest) -> SaveRetell
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+@func_log
+def save_question_feedback(request: SaveQuestionFeedbackRequest) -> SaveQuestionFeedbackResponse:
+    resp = SaveQuestionFeedbackResponse()
+    question_id = request.questionId
+    user_id = request.userId
+    up = request.upChange if request.upChange else 0
+    down = request.downChange if request.downChange else 0
+    like = request.likeChange if request.likeChange else 0
+    if not user_id or not question_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        service.save_question_feedback(question_id, user_id, up, down, like)
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

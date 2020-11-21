@@ -35,6 +35,14 @@ class Iface(object):
         """
         pass
 
+    def saveQuestionFeedback(self, request):
+        """
+        Parameters:
+         - request
+
+        """
+        pass
+
     def delQuestion(self, request):
         """
         Parameters:
@@ -130,6 +138,38 @@ class Client(Iface):
         if result.success is not None:
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "saveRetellingQuestion failed: unknown result")
+
+    def saveQuestionFeedback(self, request):
+        """
+        Parameters:
+         - request
+
+        """
+        self.send_saveQuestionFeedback(request)
+        return self.recv_saveQuestionFeedback()
+
+    def send_saveQuestionFeedback(self, request):
+        self._oprot.writeMessageBegin('saveQuestionFeedback', TMessageType.CALL, self._seqid)
+        args = saveQuestionFeedback_args()
+        args.request = request
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_saveQuestionFeedback(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = saveQuestionFeedback_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "saveQuestionFeedback failed: unknown result")
 
     def delQuestion(self, request):
         """
@@ -234,6 +274,7 @@ class Processor(Iface, TProcessor):
         self._processMap = {}
         self._processMap["getRetellingQuestion"] = Processor.process_getRetellingQuestion
         self._processMap["saveRetellingQuestion"] = Processor.process_saveRetellingQuestion
+        self._processMap["saveQuestionFeedback"] = Processor.process_saveQuestionFeedback
         self._processMap["delQuestion"] = Processor.process_delQuestion
         self._processMap["delOriginalQuestion"] = Processor.process_delOriginalQuestion
         self._processMap["generateWordbase"] = Processor.process_generateWordbase
@@ -301,6 +342,29 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("saveRetellingQuestion", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_saveQuestionFeedback(self, seqid, iprot, oprot):
+        args = saveQuestionFeedback_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = saveQuestionFeedback_result()
+        try:
+            result.success = self._handler.saveQuestionFeedback(args.request)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("saveQuestionFeedback", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -624,6 +688,131 @@ class saveRetellingQuestion_result(object):
 all_structs.append(saveRetellingQuestion_result)
 saveRetellingQuestion_result.thrift_spec = (
     (0, TType.STRUCT, 'success', [SaveRetellingQuestionResponse, None], None, ),  # 0
+)
+
+
+class saveQuestionFeedback_args(object):
+    """
+    Attributes:
+     - request
+
+    """
+
+
+    def __init__(self, request=None,):
+        self.request = request
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.request = SaveQuestionFeedbackRequest()
+                    self.request.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('saveQuestionFeedback_args')
+        if self.request is not None:
+            oprot.writeFieldBegin('request', TType.STRUCT, 1)
+            self.request.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(saveQuestionFeedback_args)
+saveQuestionFeedback_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'request', [SaveQuestionFeedbackRequest, None], None, ),  # 1
+)
+
+
+class saveQuestionFeedback_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = SaveQuestionFeedbackResponse()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('saveQuestionFeedback_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(saveQuestionFeedback_result)
+saveQuestionFeedback_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [SaveQuestionFeedbackResponse, None], None, ),  # 0
 )
 
 

@@ -1,9 +1,11 @@
+import datetime
 import logging
 
 from errors import *
 from manager import wordbase_manager, question_manager
 from model.origin import OriginTypeTwoQuestionModel
 from model.question import QuestionModel
+from model.user import UserModel
 from question.ttypes import *
 
 
@@ -109,3 +111,50 @@ def save_retelling_question(new_question: RetellingQuestion):
             index=next_q_index
         )
         new_question.save()
+
+
+def save_question_feedback(question_id: str, user_id: str, up: int, down: int, like: int):
+    user = UserModel.objects(id=user_id).first()
+    question = QuestionModel.objects(id=question_id).first()
+    if not question:
+        raise QuestionNotExist
+
+    # up
+    if up == 1 and down == 0:
+        question.feedback_ups += 1
+        question.save()
+    # cancel up
+    elif up == -1 and down == 0:
+        question.feedback_ups -= 1
+        question.save()
+    # down
+    elif up == 0 and down == 1:
+        question.feedback_downs += 1
+        question.save()
+    # cancel down
+    elif up == 0 and down == -1:
+        question.feedback_downs -= 1
+        question.save()
+    # up to down
+    elif up == -1 and down == 1:
+        question.feedback_ups -= 1
+        question.feedback_downs += 1
+        question.save()
+    # down to up
+    elif up == 1 and down == -1:
+        question.feedback_downs -= 1
+        question.feedback_ups += 1
+        question.save()
+    # like
+    elif like == 1 and question_id not in user.questions_liked:
+        question.feedback_likes += 1
+        question.save()
+        like_time = datetime.datetime.utcnow()
+        user.questions_liked.update({question_id: like_time})
+        user.save()
+    # cancel like
+    elif like == -1 and question_id in user.questions_liked:
+        question.feedback_likes -= 1
+        question.save()
+        user.questions_liked.pop(question_id)
+        user.save()
