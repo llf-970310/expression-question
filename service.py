@@ -9,7 +9,7 @@ from model.user import UserModel
 from question.ttypes import *
 
 
-def get_retelling_question(question_index: int, page: int, page_size: int) -> (list, int):
+def get_question_list(question_index: int, question_type: int, page: int, page_size: int) -> (list, int):
     if question_index:
         result_question = QuestionModel.objects(index=question_index).first()
 
@@ -17,34 +17,47 @@ def get_retelling_question(question_index: int, page: int, page_size: int) -> (l
         if not result_question:
             raise QuestionNotExist
 
-        question = RetellingQuestion(
+        question = Question(
             questionIndex=question_index,
             rawText=result_question['text'],
-            keywords=result_question['wordbase']['keywords'],
-            detailwords=result_question['wordbase']['detailwords'],
+            keywords=result_question['wordbase']['keywords'] if result_question['q_type'] == 2 else None,
+            detailwords=result_question['wordbase']['detailwords'] if result_question['q_type'] == 2 else None,
             feedbackUpCount=result_question['feedback_ups'],
             feedbackDownCount=result_question['feedback_downs'],
             usedTimes=result_question['used_times'],
+            type=result_question['q_type'],
+            questionId=str(result_question['id'])
         )
         return [question], 1
     else:
-        all_questions_num = len(QuestionModel.objects(q_type=2))
+        if question_type:
+            all_questions_num = len(QuestionModel.objects(q_type=question_type))
 
-        temp_question_query_max = page * page_size
-        question_query_max = all_questions_num if temp_question_query_max > all_questions_num \
-            else temp_question_query_max
-        questions = QuestionModel.objects(q_type=2)[((page - 1) * page_size):question_query_max].order_by('index')
+            temp_question_query_max = page * page_size
+            question_query_max = all_questions_num if temp_question_query_max > all_questions_num \
+                else temp_question_query_max
+            questions = QuestionModel.objects(q_type=question_type)[
+                        ((page - 1) * page_size):question_query_max].order_by('index')
+        else:
+            all_questions_num = len(QuestionModel.objects())
+
+            temp_question_query_max = page * page_size
+            question_query_max = all_questions_num if temp_question_query_max > all_questions_num \
+                else temp_question_query_max
+            questions = QuestionModel.objects()[((page - 1) * page_size):question_query_max].order_by('index')
 
         data = []
         for question in questions:
-            data.append(RetellingQuestion(
+            data.append(Question(
                 questionIndex=question['index'],
                 rawText=question['text'],
-                keywords=question['wordbase']['keywords'],
-                detailwords=question['wordbase']['detailwords'],
+                keywords=question['wordbase']['keywords'] if question['q_type'] == 2 else None,
+                detailwords=question['wordbase']['detailwords'] if question['q_type'] == 2 else None,
                 feedbackUpCount=question['feedback_ups'],
                 feedbackDownCount=question['feedback_downs'],
                 usedTimes=question['used_times'],
+                type=question['q_type'],
+                questionId=str(question['id'])
             ))
 
         return data, all_questions_num
@@ -75,7 +88,7 @@ def del_original_question(q_id: int):
         origin_question.delete()
 
 
-def save_retelling_question(new_question: RetellingQuestion):
+def save_retelling_question(new_question: Question):
     # modify
     if new_question.questionIndex:
         question = QuestionModel.objects(index=new_question.questionIndex).first()

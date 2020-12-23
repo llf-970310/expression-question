@@ -6,14 +6,15 @@ from util import func_log
 
 
 @func_log
-def get_retelling_question(request: GetRetellingQuestionRequest) -> GetRetellingQuestionResponse:
-    resp = GetRetellingQuestionResponse()
+def get_question_list(request: GetQuestionListRequest) -> GetQuestionListResponse:
+    resp = GetQuestionListResponse()
     question_index = request.questionIndex
+    question_type = request.questionType
     page = request.page
     page_size = request.pageSize
 
     try:
-        question_list, total = service.get_retelling_question(question_index, page, page_size)
+        question_list, total = service.get_question_list(question_index, question_type, page, page_size)
         resp.questions = question_list
         resp.total = total
         fill_status_of_resp(resp)

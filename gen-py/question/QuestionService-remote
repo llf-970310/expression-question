@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  GetRetellingQuestionResponse getRetellingQuestion(GetRetellingQuestionRequest request)')
+    print('  GetQuestionListResponse getQuestionList(GetQuestionListRequest request)')
     print('  SaveRetellingQuestionResponse saveRetellingQuestion(SaveRetellingQuestionRequest request)')
     print('  SaveQuestionFeedbackResponse saveQuestionFeedback(SaveQuestionFeedbackRequest request)')
     print('  DelQuestionResponse delQuestion(DelQuestionRequest request)')
@@ -109,11 +109,11 @@ protocol = TBinaryProtocol(transport)
 client = QuestionService.Client(protocol)
 transport.open()
 
-if cmd == 'getRetellingQuestion':
+if cmd == 'getQuestionList':
     if len(args) != 1:
-        print('getRetellingQuestion requires 1 args')
+        print('getQuestionList requires 1 args')
         sys.exit(1)
-    pp.pprint(client.getRetellingQuestion(eval(args[0]),))
+    pp.pprint(client.getQuestionList(eval(args[0]),))
 
 elif cmd == 'saveRetellingQuestion':
     if len(args) != 1:

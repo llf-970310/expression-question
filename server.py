@@ -22,8 +22,8 @@ class QuestionServiceHandler:
     def __init__(self):
         self.log = {}
 
-    def getRetellingQuestion(self, request: GetRetellingQuestionRequest) -> GetRetellingQuestionResponse:
-        return handler.get_retelling_question(request)
+    def getQuestionList(self, request: GetQuestionListRequest) -> GetQuestionListResponse:
+        return handler.get_question_list(request)
 
     def generateWordbase(self, request: GenerateWordbaseRequest) -> GenerateWordbaseResponse:
         return handler.generate_wordbase(request)

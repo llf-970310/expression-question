@@ -16,7 +16,7 @@ from thrift.transport import TTransport
 all_structs = []
 
 
-class RetellingQuestion(object):
+class Question(object):
     """
     Attributes:
      - questionIndex
@@ -26,11 +26,13 @@ class RetellingQuestion(object):
      - feedbackUpCount
      - feedbackDownCount
      - usedTimes
+     - type
+     - questionId
 
     """
 
 
-    def __init__(self, questionIndex=None, rawText=None, keywords=None, detailwords=None, feedbackUpCount=None, feedbackDownCount=None, usedTimes=None,):
+    def __init__(self, questionIndex=None, rawText=None, keywords=None, detailwords=None, feedbackUpCount=None, feedbackDownCount=None, usedTimes=None, type=None, questionId=None,):
         self.questionIndex = questionIndex
         self.rawText = rawText
         self.keywords = keywords
@@ -38,6 +40,8 @@ class RetellingQuestion(object):
         self.feedbackUpCount = feedbackUpCount
         self.feedbackDownCount = feedbackDownCount
         self.usedTimes = usedTimes
+        self.type = type
+        self.questionId = questionId
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -108,6 +112,16 @@ class RetellingQuestion(object):
                     self.usedTimes = iprot.readI32()
                 else:
                     iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.I32:
+                    self.type = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.STRING:
+                    self.questionId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -117,7 +131,7 @@ class RetellingQuestion(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RetellingQuestion')
+        oprot.writeStructBegin('Question')
         if self.questionIndex is not None:
             oprot.writeFieldBegin('questionIndex', TType.I32, 1)
             oprot.writeI32(self.questionIndex)
@@ -161,6 +175,14 @@ class RetellingQuestion(object):
             oprot.writeFieldBegin('usedTimes', TType.I32, 7)
             oprot.writeI32(self.usedTimes)
             oprot.writeFieldEnd()
+        if self.type is not None:
+            oprot.writeFieldBegin('type', TType.I32, 8)
+            oprot.writeI32(self.type)
+            oprot.writeFieldEnd()
+        if self.questionId is not None:
+            oprot.writeFieldBegin('questionId', TType.STRING, 9)
+            oprot.writeString(self.questionId.encode('utf-8') if sys.version_info[0] == 2 else self.questionId)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -185,18 +207,20 @@ class RetellingQuestion(object):
         return not (self == other)
 
 
-class GetRetellingQuestionRequest(object):
+class GetQuestionListRequest(object):
     """
     Attributes:
      - questionIndex
+     - questionType
      - page
      - pageSize
 
     """
 
 
-    def __init__(self, questionIndex=None, page=None, pageSize=None,):
+    def __init__(self, questionIndex=None, questionType=None, page=None, pageSize=None,):
         self.questionIndex = questionIndex
+        self.questionType = questionType
         self.page = page
         self.pageSize = pageSize
 
@@ -216,10 +240,15 @@ class GetRetellingQuestionRequest(object):
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.I32:
-                    self.page = iprot.readI32()
+                    self.questionType = iprot.readI32()
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
+                if ftype == TType.I32:
+                    self.page = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
                 if ftype == TType.I32:
                     self.pageSize = iprot.readI32()
                 else:
@@ -233,17 +262,21 @@ class GetRetellingQuestionRequest(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('GetRetellingQuestionRequest')
+        oprot.writeStructBegin('GetQuestionListRequest')
         if self.questionIndex is not None:
             oprot.writeFieldBegin('questionIndex', TType.I32, 1)
             oprot.writeI32(self.questionIndex)
             oprot.writeFieldEnd()
+        if self.questionType is not None:
+            oprot.writeFieldBegin('questionType', TType.I32, 2)
+            oprot.writeI32(self.questionType)
+            oprot.writeFieldEnd()
         if self.page is not None:
-            oprot.writeFieldBegin('page', TType.I32, 2)
+            oprot.writeFieldBegin('page', TType.I32, 3)
             oprot.writeI32(self.page)
             oprot.writeFieldEnd()
         if self.pageSize is not None:
-            oprot.writeFieldBegin('pageSize', TType.I32, 3)
+            oprot.writeFieldBegin('pageSize', TType.I32, 4)
             oprot.writeI32(self.pageSize)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -264,7 +297,7 @@ class GetRetellingQuestionRequest(object):
         return not (self == other)
 
 
-class GetRetellingQuestionResponse(object):
+class GetQuestionListResponse(object):
     """
     Attributes:
      - questions
@@ -295,7 +328,7 @@ class GetRetellingQuestionResponse(object):
                     self.questions = []
                     (_etype38, _size35) = iprot.readListBegin()
                     for _i39 in range(_size35):
-                        _elem40 = RetellingQuestion()
+                        _elem40 = Question()
                         _elem40.read(iprot)
                         self.questions.append(_elem40)
                     iprot.readListEnd()
@@ -325,7 +358,7 @@ class GetRetellingQuestionResponse(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('GetRetellingQuestionResponse')
+        oprot.writeStructBegin('GetQuestionListResponse')
         if self.questions is not None:
             oprot.writeFieldBegin('questions', TType.LIST, 1)
             oprot.writeListBegin(TType.STRUCT, len(self.questions))
@@ -852,7 +885,7 @@ class SaveRetellingQuestionRequest(object):
                 break
             if fid == 1:
                 if ftype == TType.STRUCT:
-                    self.newQuestion = RetellingQuestion()
+                    self.newQuestion = Question()
                     self.newQuestion.read(iprot)
                 else:
                     iprot.skip(ftype)
@@ -1137,8 +1170,8 @@ class SaveQuestionFeedbackResponse(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RetellingQuestion)
-RetellingQuestion.thrift_spec = (
+all_structs.append(Question)
+Question.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'questionIndex', None, None, ),  # 1
     (2, TType.STRING, 'rawText', 'UTF8', None, ),  # 2
@@ -1147,18 +1180,21 @@ RetellingQuestion.thrift_spec = (
     (5, TType.I32, 'feedbackUpCount', None, None, ),  # 5
     (6, TType.I32, 'feedbackDownCount', None, None, ),  # 6
     (7, TType.I32, 'usedTimes', None, None, ),  # 7
+    (8, TType.I32, 'type', None, None, ),  # 8
+    (9, TType.STRING, 'questionId', 'UTF8', None, ),  # 9
 )
-all_structs.append(GetRetellingQuestionRequest)
-GetRetellingQuestionRequest.thrift_spec = (
+all_structs.append(GetQuestionListRequest)
+GetQuestionListRequest.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'questionIndex', None, None, ),  # 1
-    (2, TType.I32, 'page', None, None, ),  # 2
-    (3, TType.I32, 'pageSize', None, None, ),  # 3
+    (2, TType.I32, 'questionType', None, None, ),  # 2
+    (3, TType.I32, 'page', None, None, ),  # 3
+    (4, TType.I32, 'pageSize', None, None, ),  # 4
 )
-all_structs.append(GetRetellingQuestionResponse)
-GetRetellingQuestionResponse.thrift_spec = (
+all_structs.append(GetQuestionListResponse)
+GetQuestionListResponse.thrift_spec = (
     None,  # 0
-    (1, TType.LIST, 'questions', (TType.STRUCT, [RetellingQuestion, None], False), None, ),  # 1
+    (1, TType.LIST, 'questions', (TType.STRUCT, [Question, None], False), None, ),  # 1
     (2, TType.I32, 'total', None, None, ),  # 2
     (3, TType.I32, 'statusCode', None, None, ),  # 3
     (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
@@ -1201,7 +1237,7 @@ DelOriginalQuestionResponse.thrift_spec = (
 all_structs.append(SaveRetellingQuestionRequest)
 SaveRetellingQuestionRequest.thrift_spec = (
     None,  # 0
-    (1, TType.STRUCT, 'newQuestion', [RetellingQuestion, None], None, ),  # 1
+    (1, TType.STRUCT, 'newQuestion', [Question, None], None, ),  # 1
 )
 all_structs.append(SaveRetellingQuestionResponse)
 SaveRetellingQuestionResponse.thrift_spec = (

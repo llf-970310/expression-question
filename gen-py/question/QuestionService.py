@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def getRetellingQuestion(self, request):
+    def getQuestionList(self, request):
         """
         Parameters:
          - request
@@ -75,24 +75,24 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def getRetellingQuestion(self, request):
+    def getQuestionList(self, request):
         """
         Parameters:
          - request
 
         """
-        self.send_getRetellingQuestion(request)
-        return self.recv_getRetellingQuestion()
+        self.send_getQuestionList(request)
+        return self.recv_getQuestionList()
 
-    def send_getRetellingQuestion(self, request):
-        self._oprot.writeMessageBegin('getRetellingQuestion', TMessageType.CALL, self._seqid)
-        args = getRetellingQuestion_args()
+    def send_getQuestionList(self, request):
+        self._oprot.writeMessageBegin('getQuestionList', TMessageType.CALL, self._seqid)
+        args = getQuestionList_args()
         args.request = request
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_getRetellingQuestion(self):
+    def recv_getQuestionList(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -100,12 +100,12 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = getRetellingQuestion_result()
+        result = getQuestionList_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "getRetellingQuestion failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "getQuestionList failed: unknown result")
 
     def saveRetellingQuestion(self, request):
         """
@@ -272,7 +272,7 @@ class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["getRetellingQuestion"] = Processor.process_getRetellingQuestion
+        self._processMap["getQuestionList"] = Processor.process_getQuestionList
         self._processMap["saveRetellingQuestion"] = Processor.process_saveRetellingQuestion
         self._processMap["saveQuestionFeedback"] = Processor.process_saveQuestionFeedback
         self._processMap["delQuestion"] = Processor.process_delQuestion
@@ -300,13 +300,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_getRetellingQuestion(self, seqid, iprot, oprot):
-        args = getRetellingQuestion_args()
+    def process_getQuestionList(self, seqid, iprot, oprot):
+        args = getQuestionList_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = getRetellingQuestion_result()
+        result = getQuestionList_result()
         try:
-            result.success = self._handler.getRetellingQuestion(args.request)
+            result.success = self._handler.getQuestionList(args.request)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -318,7 +318,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("getRetellingQuestion", msg_type, seqid)
+        oprot.writeMessageBegin("getQuestionList", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -441,7 +441,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class getRetellingQuestion_args(object):
+class getQuestionList_args(object):
     """
     Attributes:
      - request
@@ -463,7 +463,7 @@ class getRetellingQuestion_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRUCT:
-                    self.request = GetRetellingQuestionRequest()
+                    self.request = GetQuestionListRequest()
                     self.request.read(iprot)
                 else:
                     iprot.skip(ftype)
@@ -476,7 +476,7 @@ class getRetellingQuestion_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('getRetellingQuestion_args')
+        oprot.writeStructBegin('getQuestionList_args')
         if self.request is not None:
             oprot.writeFieldBegin('request', TType.STRUCT, 1)
             self.request.write(oprot)
@@ -497,14 +497,14 @@ class getRetellingQuestion_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(getRetellingQuestion_args)
-getRetellingQuestion_args.thrift_spec = (
+all_structs.append(getQuestionList_args)
+getQuestionList_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRUCT, 'request', [GetRetellingQuestionRequest, None], None, ),  # 1
+    (1, TType.STRUCT, 'request', [GetQuestionListRequest, None], None, ),  # 1
 )
 
 
-class getRetellingQuestion_result(object):
+class getQuestionList_result(object):
     """
     Attributes:
      - success
@@ -526,7 +526,7 @@ class getRetellingQuestion_result(object):
                 break
             if fid == 0:
                 if ftype == TType.STRUCT:
-                    self.success = GetRetellingQuestionResponse()
+                    self.success = GetQuestionListResponse()
                     self.success.read(iprot)
                 else:
                     iprot.skip(ftype)
@@ -539,7 +539,7 @@ class getRetellingQuestion_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('getRetellingQuestion_result')
+        oprot.writeStructBegin('getQuestionList_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.STRUCT, 0)
             self.success.write(oprot)
@@ -560,9 +560,9 @@ class getRetellingQuestion_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(getRetellingQuestion_result)
-getRetellingQuestion_result.thrift_spec = (
-    (0, TType.STRUCT, 'success', [GetRetellingQuestionResponse, None], None, ),  # 0
+all_structs.append(getQuestionList_result)
+getQuestionList_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [GetQuestionListResponse, None], None, ),  # 0
 )
 
 
